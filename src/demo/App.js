@@ -1,19 +1,18 @@
 /* eslint no-magic-numbers: 0 */
 import React, { Component } from "react";
 
-import { WebvizContainerPlaceholder } from "../lib";
+import { UPlot } from "../lib";
 
-const steps = [
-    {
-        selector: "#blue-rect",
-        content: "This is my first step",
-    },
-    {
-        selector: "#green-rect",
-        content: "This is my second step",
-    },
-];
+const data = require("./example-data/uplot.json");
+var series = [];
 
+for (let i = 1; i < data.length; i++) {
+    series.push({
+        label: i,
+        width: 1,
+        color: "#243746",
+    });
+}
 class App extends Component {
     constructor() {
         super();
@@ -26,14 +25,7 @@ class App extends Component {
     }
 
     render() {
-        return (
-            <div>
-                <WebvizContainerPlaceholder
-                    setProps={this.setProps}
-                    tour_steps={steps}
-                />
-            </div>
-        );
+        return <UPlot id={"test"} data={data} series={series} />;
     }
 }
 
