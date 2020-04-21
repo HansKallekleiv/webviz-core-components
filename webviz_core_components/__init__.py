@@ -8,25 +8,22 @@ from pkg_resources import get_distribution, DistributionNotFound
 
 import dash as _dash
 
-# noinspection PyUnresolvedReferences
 try:
     from ._imports_ import *
     from ._imports_ import __all__
 
     from .graph import Graph
+    from .flexbox import FlexBox
 
-    __all__.append("Graph")
+    __all__ += ["Graph", "FlexBox"]
+
 except ModuleNotFoundError:
     # The _imports_ file does not exist before dash-generate-components
     # has been called.
     pass
 
 try:
-    # Dash fingerprint system does not work with +. E.g. a development version tag like
-    # 0.0.10.dev11+abcd1234.d20191103 will break Dash's fingerprint system.
-    # Need to replace + with some supported character as long as
-    # https://github.com/plotly/dash/issues/995 is open.
-    __version__ = get_distribution(__name__).version.replace("+", ".")
+    __version__ = get_distribution(__name__).version
 except DistributionNotFound:
     # package is not installed
     pass
@@ -58,10 +55,11 @@ _js_dist = [
         "dev_package_path": "webviz_core_components.dev.js",
         "namespace": package_name,
     },
-    {"relative_package_path": "plotly-cartesian.js", "namespace": package_name},
 ]
 
-_css_dist = []
+_css_dist = [
+    {"relative_package_path": "webviz_core_components.css", "namespace": package_name,}
+]
 
 
 for _component in __all__:

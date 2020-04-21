@@ -1,6 +1,8 @@
 [![PyPI version](https://badge.fury.io/py/webviz-core-components.svg)](https://badge.fury.io/py/webviz-core-components)
 [![Build Status](https://travis-ci.org/equinor/webviz-core-components.svg?branch=master)](https://travis-ci.org/equinor/webviz-core-components)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e5f81735a1a9423eb7be3fee8e2d30ee)](https://www.codacy.com/manual/webviz/webviz-core-components?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=equinor/webviz-core-components&amp;utm_campaign=Badge_Grade)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/equinor/webviz-core-components.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/equinor/webviz-core-components/alerts/)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/equinor/webviz-core-components.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/equinor/webviz-core-components/context:javascript)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/equinor/webviz-core-components.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/equinor/webviz-core-components/context:python)
 [![Python 3.6 | 3.7 | 3.8](https://img.shields.io/badge/python-3.6%20|%203.7%20|%203.8-blue.svg)](https://www.python.org/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black%20%28Python%29-000000.svg)](https://github.com/psf/black)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier%20%28JavaScript%29-ff69b4.svg)](https://github.com/prettier/prettier)
@@ -14,19 +16,6 @@ You can quickly get started with:
 1.  Run `pip install webviz-core-components`
 2.  Run `python usage.py`
 3.  Visit http://localhost:8050 in your web browser
-
-> :warning: The components here are used by [`webviz-config`](https://github.com/equinor/webviz-config).
-In order to facilitate a strong [CSP configuration](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP),
-this package has a side effect of changing the Plotly distribution coming with
-[`dash-core-components`](https://github.com/plotly/dash-core-components) to one
-that do not rely on [`eval()`](https://developer.chrome.com/extensions/contentSecurityPolicy#relaxing-eval).
-More specifically it changes from `plotly-full` to `plotly-cartesian` bundle. This will be
-necessary in order to enforce a strong CSP configuration as long as
-[this `plotly` issue](https://github.com/plotly/plotly.js/issues/897) and
-[this `dash-core-components` issue](https://github.com/plotly/dash-core-components/issues/462)
-both are open. Note that this side-effect only takes place if `dash-core-components`
-is installed, which is a requirement if the `Graph` component from this repository
-is going to be used.
 
 ## How to contribute
 

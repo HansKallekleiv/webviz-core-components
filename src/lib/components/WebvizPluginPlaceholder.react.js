@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import htmlToImage from "html-to-image";
+import html2canvas from "html2canvas";
 import Tour from "reactour";
 
 import {
@@ -11,18 +11,18 @@ import {
     faExpand,
 } from "@fortawesome/free-solid-svg-icons";
 
-import WebvizToolbarButton from "../private-components/webviz-container-placeholder-resources/WebvizToolbarButton";
-import WebvizContentOverlay from "../private-components/webviz-container-placeholder-resources/WebvizContentOverlay";
-import download_file from "../private-components/webviz-container-placeholder-resources/download_file";
+import WebvizToolbarButton from "../private-components/webviz-plugin-placeholder-resources/WebvizToolbarButton";
+import WebvizContentOverlay from "../private-components/webviz-plugin-placeholder-resources/WebvizContentOverlay";
+import download_file from "../private-components/webviz-plugin-placeholder-resources/download_file";
 
-import "./webviz_container_component.css";
+import "./webviz_plugin_component.css";
 
 /**
- * WebvizContainerPlaceholder is a fundamental webviz dash component.
+ * WebvizPluginPlaceholder is a fundamental webviz dash component.
  * It takes a property, `label`, and displays it.
  * It renders an input with the property `value` which is editable by the user.
  */
-export default class WebvizContainerPlaceholder extends Component {
+export default class WebvizPluginPlaceholder extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -32,7 +32,7 @@ export default class WebvizContainerPlaceholder extends Component {
         };
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(_, prevState) {
         if (this.props.zip_base64 !== "") {
             const now = new Date();
             const filename = `webviz-data-${now.getFullYear()}-${now.getMonth() +
@@ -40,6 +40,13 @@ export default class WebvizContainerPlaceholder extends Component {
 
             download_file(filename, this.props.zip_base64);
             this.props.setProps({ zip_base64: "" });
+        }
+
+        // Hide/show body scrollbar depending on plugin going in/out of full screen mode.
+        if (this.state.expanded !== prevState.expanded) {
+            document.body.style.overflow = this.state.expanded
+                ? "hidden"
+                : null;
         }
     }
 
@@ -52,16 +59,13 @@ export default class WebvizContainerPlaceholder extends Component {
             <>
                 <div
                     className={
-                        "webviz-config-container-wrapper" +
+                        "webviz-config-plugin-wrapper" +
                         (this.state.expanded
-                            ? " webviz-config-container-expand"
+                            ? " webviz-config-plugin-expand"
                             : "")
                     }
                 >
-                    <div
-                        id={this.props.id}
-                        className="webviz-container-content"
-                    >
+                    <div id={this.props.id} className="webviz-plugin-content">
                         {this.props.children}
 
                         <WebvizContentOverlay
@@ -71,7 +75,7 @@ export default class WebvizContainerPlaceholder extends Component {
                         />
                     </div>
                     <div
-                        className="webviz-config-container-buttonbar"
+                        className="webviz-config-plugin-buttonbar"
                         id="camerabutton"
                     >
                         {this.props.buttons.includes("screenshot") && (
@@ -79,37 +83,34 @@ export default class WebvizContainerPlaceholder extends Component {
                                 icon={faCameraRetro}
                                 tooltip="Take screenshot"
                                 onClick={() =>
-                                    htmlToImage
-                                        .toBlob(
-                                            document.getElementById(
-                                                this.props.id
-                                            )
-                                        )
-                                        .then(function(blob) {
+                                    html2canvas(
+                                        document.getElementById(this.props.id)
+                                    ).then(canvas =>
+                                        canvas.toBlob(blob =>
                                             download_file(
                                                 "webviz-screenshot.png",
                                                 blob,
                                                 true
-                                            );
-                                        })
+                                            )
+                                        )
+                                    )
                                 }
                             />
                         )}
                         {this.props.buttons.includes("expand") && (
                             <WebvizToolbarButton
                                 icon={faExpand}
-                                tooltip="Expand container"
+                                tooltip="Expand"
                                 selected={this.state.expanded}
-                                onClick={() =>
-                                    this.setState(
-                                        { expanded: !this.state.expanded },
-                                        () => {
-                                            window.dispatchEvent(
-                                                new Event("resize")
-                                            );
-                                        }
-                                    )
-                                }
+                                onClick={() => {
+                                    this.setState({
+                                        expanded: !this.state.expanded,
+                                    });
+                                    // Trigger resize events of content in plugin,
+                                    // relevant as long as this issue is open:
+                                    // https://github.com/plotly/plotly.js/issues/3984
+                                    window.dispatchEvent(new Event("resize"));
+                                }}
                             />
                         )}
                         {this.props.buttons.includes("download_zip") && (
@@ -167,7 +168,7 @@ export default class WebvizContainerPlaceholder extends Component {
     }
 }
 
-WebvizContainerPlaceholder.defaultProps = {
+WebvizPluginPlaceholder.defaultProps = {
     id: "some-id",
     buttons: [
         "screenshot",
@@ -182,7 +183,7 @@ WebvizContainerPlaceholder.defaultProps = {
     zip_base64: "",
 };
 
-WebvizContainerPlaceholder.propTypes = {
+WebvizPluginPlaceholder.propTypes = {
     /**
      * The ID used to identify this component in Dash callbacks
      */

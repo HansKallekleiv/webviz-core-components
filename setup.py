@@ -11,7 +11,7 @@ with open(os.path.join("webviz_core_components", "package-info.json")) as f:
 
 package_name = package["name"].replace(" ", "_").replace("-", "_")
 
-install_requires = ["dash~=1.1"]
+install_requires = ["dash~=1.6"]
 
 tests_require = ["selenium", "pylint", "black"]
 
@@ -43,6 +43,6 @@ setup(
         "Topic :: Multimedia :: Graphics",
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Visualization",
-        "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
+        "License :: OSI Approved :: MIT License",
     ],
 )

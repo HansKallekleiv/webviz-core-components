@@ -25,6 +25,7 @@ class App extends Component {
     }
 
     render() {
+
         return <UPlot id={"test"} data={data} series={series} />;
     }
 }
